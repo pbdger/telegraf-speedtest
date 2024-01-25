@@ -26,20 +26,23 @@ token = "$INFLUX_TOKEN"
 organization = "$INFLUX_ORG"
 
 ## Destination bucket to write into.
-bucket = "speedtest"
+bucket = "$INFLUX_BUCKET"
 
 [agent]
-interval = "30m"
+interval = "15m"
+
+# uncomment for test purpose
+# debug = true
+# quiet = false
 
 [[inputs.exec]]
 ## Commands array
-commands = ["speedtest --format=json-pretty"]
+["speedtest --format=json-pretty --accept-license --accept-gdpr"]
 
 ## Timeout for each command to complete.
 timeout = "90s"
 
-## measurement name suffix (for separating different commands)
-name_suffix = "_speedtest"
+name_override = "speedtest"
 
 ## Data format to consume.
 ## Each data format has its own unique set of configuration options, read
