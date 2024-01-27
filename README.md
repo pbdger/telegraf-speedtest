@@ -1,70 +1,19 @@
 # telegraf-speedtest
-Telegraf with Ookla's Speedtest docker image
+Telegraf docker image plus [Ooklas Speedtest](https://www.speedtest.net/de/apps/cli).
 
-[https://hub.docker.com/r/foureight84/telegraf-speedtest](https://hub.docker.com/r/foureight84/telegraf-speedtest)
+### Usage for test purpose
 
-### Usage
-The dashboard to use with this container is the Speedtest Influxdata community template [https://github.com/influxdata/community-templates/tree/master/speedtest](https://github.com/influxdata/community-templates/tree/master/speedtest) with InfluxDB v2.
+* Set Environment variable in file docker_run.sh
+* Execute docker_run.sh
+* Metric data will be shown in your InfluxDB
 
-After importing this template, copy the `nostalgic-lederberg-676001` configuration found in the Data > Telegraf page.
+### Docker-Image
 
-The configuration should look something like this:
+An out of the box image can be found on https://hub.docker.com/repository/docker/pbdger/telegraf-speedtest/general
 
-```
-[[outputs.influxdb_v2]]
-## The URLs of the InfluxDB cluster nodes.
-##
-## Multiple URLs can be specified for a single cluster, only ONE of the
-## urls will be written to each interval.
-## urls exp: http://127.0.0.1:9999
-urls = ["$INFLUX_HOST"]
+### Simple dashboard example
 
-## Token for authentication.
-token = "$INFLUX_TOKEN"
+This picture demonstrates the data presentation in Grafana. The related dashboard
+is placed in folder grafana.
 
-## Organization is the name of the organization you wish to write to; must exist.
-organization = "$INFLUX_ORG"
-
-## Destination bucket to write into.
-bucket = "$INFLUX_BUCKET"
-
-[agent]
-interval = "15m"
-
-# uncomment for test purpose
-# debug = true
-# quiet = false
-
-[[inputs.exec]]
-## Commands array
-["speedtest --format=json-pretty --accept-license --accept-gdpr"]
-
-## Timeout for each command to complete.
-timeout = "90s"
-
-name_override = "speedtest"
-
-## Data format to consume.
-## Each data format has its own unique set of configuration options, read
-## more about them here:
-## https://github.com/influxdata/telegraf/blob/master/docs/DATA_FORMATS_INPUT.md
-data_format = "json"
-```
-
-Update `$INFLUX_HOST`, `$INFLUX_TOKEN`, and `$INFLUX_ORG` for your environment.
-
-The `commands` field needs to be modified from `["speedtest --format=json-pretty"]` to `["speedtest speedtest --accept-license --format=json-pretty"]`. This is because an agreement prompt is required on first-run. It's not really feasible to exec into the Docker container to trigger the agreement.
-
-Save the config as `telegraf_speedtest.conf`
-
-Example docker-compose.yaml:
-
-```
-version: "3.7"
-
-services:    
-  telegraf:
-    image: foureight84/telegraf-speedtest:latest
-    volumes:
-      - ./telegraf_speedtest.conf:/etc/telegraf/telegraf.conf
-```
+![grafana.telegraf-speedtest.jpg](grafana%2Fgrafana.telegraf-speedtest.jpg)
