@@ -7,9 +7,20 @@ Telegraf docker image plus [Ooklas Speedtest](https://www.speedtest.net/de/apps/
 * Execute docker_run.sh
 * Metric data will be shown in your InfluxDB
 
+#### Create docker image
+
+```
+docker build . --platform "linux/amd64" -t pbdger/telegraf-speedtest:1.1
+```
+
+#### Test docker image
+* Set Environment variables in file docker_run.sh
+* Execute docker_run.sh
+* Metric data will be shown in your InfluxDB
+
 ### Docker-Image
 
-An out of the box image can be found on https://hub.docker.com/repository/docker/pbdger/telegraf-speedtest/general
+An out-of-the-box image can be found on https://hub.docker.com/repository/docker/pbdger/telegraf-speedtest/general
 
 ### Simple dashboard example
 
